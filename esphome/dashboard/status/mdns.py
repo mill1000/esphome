@@ -18,11 +18,10 @@ from ..entries import DashboardEntry, bool_to_entry_state
 class MDNSStatus:
     """Class that updates the mdns status."""
 
-    def __init__(self, default_interface=False) -> None:
+    def __init__(self) -> None:
         """Initialize the MDNSStatus class."""
         super().__init__()
         self.aiozc: AsyncEsphomeZeroconf | None = None
-        self._zc_default_interface: bool = default_interface
         # This is the current mdns state for each host (True, False, None)
         self.host_mdns_state: dict[str, bool | None] = {}
         self._loop = asyncio.get_running_loop()
@@ -65,7 +64,9 @@ class MDNSStatus:
     async def async_run(self) -> None:
         dashboard = DASHBOARD
         entries = dashboard.entries
-        aiozc = AsyncEsphomeZeroconf(default_interface=self._zc_default_interface)
+        aiozc = AsyncEsphomeZeroconf(
+            default_interface=dashboard.settings.zeroconf_default_interface
+        )
         self.aiozc = aiozc
         host_mdns_state = self.host_mdns_state
 
