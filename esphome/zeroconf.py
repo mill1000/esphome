@@ -5,7 +5,13 @@ from dataclasses import dataclass
 import logging
 from typing import Callable
 
-from zeroconf import IPVersion, ServiceInfo, ServiceStateChange, Zeroconf
+from zeroconf import (
+    InterfaceChoice,
+    IPVersion,
+    ServiceInfo,
+    ServiceStateChange,
+    Zeroconf,
+)
 from zeroconf.asyncio import AsyncServiceBrowser, AsyncServiceInfo, AsyncZeroconf
 
 from esphome.storage_json import StorageJSON, ext_storage_path
@@ -176,6 +182,13 @@ def _make_host_resolver(host: str) -> HostResolver:
 
 
 class EsphomeZeroconf(Zeroconf):
+    def __init__(self, default_interface=False) -> None:
+        super().__init__(
+            interfaces=(
+                InterfaceChoice.Default if default_interface else InterfaceChoice.All
+            )
+        )
+
     def resolve_host(self, host: str, timeout: float = 3.0) -> str | None:
         """Resolve a host name to an IP address."""
         info = _make_host_resolver(host)
@@ -188,6 +201,13 @@ class EsphomeZeroconf(Zeroconf):
 
 
 class AsyncEsphomeZeroconf(AsyncZeroconf):
+    def __init__(self, default_interface=False) -> None:
+        super().__init__(
+            interfaces=(
+                InterfaceChoice.Default if default_interface else InterfaceChoice.All
+            )
+        )
+
     async def async_resolve_host(self, host: str, timeout: float = 3.0) -> str | None:
         """Resolve a host name to an IP address."""
         info = _make_host_resolver(host)

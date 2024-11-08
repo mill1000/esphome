@@ -55,6 +55,10 @@ class DashboardSettings:
         return os.getenv("ESPHOME_DASHBOARD_RELATIVE_URL") or "/"
 
     @property
+    def zeroconf_default_interface(self):
+        return get_bool_env("ESPHOME_DASHBOARD_ZEROCONF_DEFAULT_INTERFACE")
+
+    @property
     def status_use_ping(self):
         return get_bool_env("ESPHOME_DASHBOARD_USE_PING")
 

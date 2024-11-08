@@ -101,10 +101,13 @@ def is_ip_address(host):
 
 def _resolve_with_zeroconf(host):
     from esphome.core import EsphomeError
+    from esphome.dashboard.core import DASHBOARD
     from esphome.zeroconf import EsphomeZeroconf
 
     try:
-        zc = EsphomeZeroconf()
+        zc = EsphomeZeroconf(
+            default_interface=DASHBOARD.settings.zeroconf_default_interface
+        )
     except Exception as err:
         raise EsphomeError(
             "Cannot start mDNS sockets, is this a docker container without "

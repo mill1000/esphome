@@ -136,7 +136,7 @@ class ESPHomeDashboard:
         else:
             from .status.mdns import MDNSStatus
 
-            mdns_status = MDNSStatus()
+            mdns_status = MDNSStatus(settings.zeroconf_default_interface)
             await mdns_status.async_refresh_hosts()
             self.mdns_status = mdns_status
             mdns_task = asyncio.create_task(mdns_status.async_run())
